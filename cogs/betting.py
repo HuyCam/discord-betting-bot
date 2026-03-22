@@ -35,17 +35,21 @@ class Betting(commands.Cog):
             )
             return
 
+        msg = await ctx.send(
+            f"🪙 {ctx.author.display_name} picked **{pick}** — waiting for the result..."
+        )
+
         result = random.choice(["heads", "tails"])
         win = result == pick
 
         if win:
             db.update_balance(user_id, amount)
-            await ctx.send(
+            await msg.edit(content=
                 f"🪙 {ctx.author.display_name} picked **{pick}** — it landed on **{result.upper()}** — You **won** {amount} coins!"
             )
         else:
             db.update_balance(user_id, -amount)
-            await ctx.send(
+            await msg.edit(content=
                 f"🪙 {ctx.author.display_name} picked **{pick}** — it landed on **{result.upper()}** — You **lost** {amount} coins."
             )
 
