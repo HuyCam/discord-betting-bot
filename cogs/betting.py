@@ -15,7 +15,7 @@ class Betting(commands.Cog):
 
         pick = pick.lower()
         if pick not in ("heads", "tails", "h", "t"):
-            await ctx.send("Pick must be `heads` or `tails`. Usage: `cbot coinflip <amount> <heads|tails>`")
+            await ctx.send("Pick must be `heads` or `tails`. Usage: `pbot coinflip <amount> <heads|tails>`")
             return
 
         # normalise shorthand h/t → heads/tails
@@ -41,20 +41,20 @@ class Betting(commands.Cog):
         if win:
             db.update_balance(user_id, amount)
             await ctx.send(
-                f"🪙 You picked **{pick}** — it landed on **{result.upper()}** — You **won** {amount} coins!"
+                f"🪙 {ctx.author.display_name} picked **{pick}** — it landed on **{result.upper()}** — You **won** {amount} coins!"
             )
         else:
             db.update_balance(user_id, -amount)
             await ctx.send(
-                f"🪙 You picked **{pick}** — it landed on **{result.upper()}** — You **lost** {amount} coins."
+                f"🪙 {ctx.author.display_name} picked **{pick}** — it landed on **{result.upper()}** — You **lost** {amount} coins."
             )
 
     @coinflip.error
     async def coinflip_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `cbot coinflip <amount> <heads|tails>`")
+            await ctx.send("Usage: `pbot coinflip <amount> <heads|tails>`")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("Amount must be a whole number. Usage: `cbot coinflip <amount> <heads|tails>`")
+            await ctx.send("Amount must be a whole number. Usage: `pbot coinflip <amount> <heads|tails>`")
 
     @commands.command(name="balance", aliases=["bal"])
     async def balance(self, ctx):
@@ -100,9 +100,9 @@ class Betting(commands.Cog):
     @give.error
     async def give_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `cbot give <@user> <amount>`")
+            await ctx.send("Usage: `pbot give <@user> <amount>`")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("Usage: `cbot give <@user> <amount>`")
+            await ctx.send("Usage: `pbot give <@user> <amount>`")
 
 
 async def setup(bot):

@@ -10,17 +10,17 @@ class Help(commands.Cog):
     async def help(self, ctx):
         """Show all available commands."""
         embed = discord.Embed(
-            title="🎰 CBot — Command List",
-            description="Prefix: `cbot `",
+            title="🎰 pbot — Command List",
+            description="Prefix: `pbot `",
             color=discord.Color.gold()
         )
 
         embed.add_field(
             name="💰 Betting",
             value=(
-                "`cbot coinflip <amount> <heads|tails>` — Flip a coin and bet on the result\n"
-                "`cbot balance` — Check your current coin balance\n"
-                "`cbot give <@user> <amount>` — Transfer coins to another player"
+                "`pbot coinflip <amount> <heads|tails>` — Flip a coin and bet on the result\n"
+                "`pbot balance` — Check your current coin balance\n"
+                "`pbot give <@user> <amount>` — Transfer coins to another player"
             ),
             inline=False
         )
@@ -28,8 +28,8 @@ class Help(commands.Cog):
         embed.add_field(
             name="🎭 Fun",
             value=(
-                "`cbot cam` — Who is Cam?\n"
-                "`cbot tin` — Who is Tin?"
+                "`pbot cam` — Who is Cam?\n"
+                "`pbot tin` — Who is Tin?"
             ),
             inline=False
         )

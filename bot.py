@@ -18,7 +18,7 @@ if _missing:
 intents = discord.Intents.default()
 intents.message_content = True  # required for prefix commands
 
-bot = commands.Bot(command_prefix="cbot ", intents=intents, help_command=None)
+bot = commands.Bot(command_prefix="pbot ", intents=intents, help_command=None)
 
 
 @bot.event
