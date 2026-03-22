@@ -9,15 +9,26 @@ class Betting(commands.Cog):
         self.bot = bot
 
     @commands.command(name="coinflip", aliases=["cf"])
-    async def coinflip(self, ctx, amount: int):
-        """Flip a coin. Win or lose the bet amount."""
+    async def coinflip(self, ctx, amount: int, pick: str):
+        """Flip a coin. Pick heads or tails and bet an amount."""
         user_id = str(ctx.author.id)
-        balance = db.get_balance(user_id)
+
+        pick = pick.lower()
+        if pick not in ("heads", "tails", "h", "t"):
+            await ctx.send("Pick must be `heads` or `tails`. Usage: `cbot coinflip <amount> <heads|tails>`")
+            return
+
+        # normalise shorthand h/t → heads/tails
+        if pick == "h":
+            pick = "heads"
+        elif pick == "t":
+            pick = "tails"
 
         if amount <= 0:
             await ctx.send("Bet amount must be greater than 0.")
             return
 
+        balance = db.get_balance(user_id)
         if amount > balance:
             await ctx.send(
                 f"Not enough coins. Your balance: **{balance}** coins."
@@ -25,27 +36,25 @@ class Betting(commands.Cog):
             return
 
         result = random.choice(["heads", "tails"])
-        win = random.random() < 0.5
+        win = result == pick
 
         if win:
-            new_balance = db.update_balance(user_id, amount)
+            db.update_balance(user_id, amount)
             await ctx.send(
-                f"🪙 **{result.upper()}** — You **won** {amount} coins! "
-                f"Balance: **{new_balance}** coins."
+                f"🪙 You picked **{pick}** — it landed on **{result.upper()}** — You **won** {amount} coins!"
             )
         else:
-            new_balance = db.update_balance(user_id, -amount)
+            db.update_balance(user_id, -amount)
             await ctx.send(
-                f"🪙 **{result.upper()}** — You **lost** {amount} coins. "
-                f"Balance: **{new_balance}** coins."
+                f"🪙 You picked **{pick}** — it landed on **{result.upper()}** — You **lost** {amount} coins."
             )
 
     @coinflip.error
     async def coinflip_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `cbot coinflip <amount>`")
+            await ctx.send("Usage: `cbot coinflip <amount> <heads|tails>`")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("Amount must be a whole number. Usage: `cbot coinflip <amount>`")
+            await ctx.send("Amount must be a whole number. Usage: `cbot coinflip <amount> <heads|tails>`")
 
     @commands.command(name="balance", aliases=["bal"])
     async def balance(self, ctx):
@@ -94,14 +103,6 @@ class Betting(commands.Cog):
             await ctx.send("Usage: `cbot give <@user> <amount>`")
         elif isinstance(error, commands.BadArgument):
             await ctx.send("Usage: `cbot give <@user> <amount>`")
-
-    @commands.command(name="cam")
-    async def talk(self, ctx):
-        await ctx.send("Huy Cam the King of 5 realms")
-
-    @commands.command(name="tin")
-    async def talk(self, ctx):
-        await ctx.send("Tin Trong, aka Viego the King of shadow isles")
 
 
 async def setup(bot):

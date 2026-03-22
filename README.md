@@ -6,7 +6,7 @@ A simple coin flip betting bot for private Discord servers.
 
 1. Copy `.env.example` to `.env` and fill in your credentials
 2. `pip install -r requirements.txt`
-3. `python bot.py`
+3. `py bot.py`
 
 ## Commands
 

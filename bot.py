@@ -18,7 +18,7 @@ if _missing:
 intents = discord.Intents.default()
 intents.message_content = True  # required for prefix commands
 
-bot = commands.Bot(command_prefix="cbot ", intents=intents)
+bot = commands.Bot(command_prefix="cbot ", intents=intents, help_command=None)
 
 
 @bot.event
@@ -30,6 +30,8 @@ async def main():
     db.init_db()
     async with bot:
         await bot.load_extension("cogs.betting")
+        await bot.load_extension("cogs.fun")
+        await bot.load_extension("cogs.help")
         await bot.start(os.environ["DISCORD_TOKEN"])
 
 
